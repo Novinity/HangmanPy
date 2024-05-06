@@ -12,7 +12,7 @@ class GameScreen:
         self.open = False
 
         if saveData is not None:
-            print(saveData)
+            #print(saveData)
             self.chances = saveData["chances"]
             self.word = saveData["word"]
             self.mistakes = saveData["mistakes"]

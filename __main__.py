@@ -1,6 +1,7 @@
 from systems.screen_manager import OpenMenu
 import systems.installation as installation
 from systems.save_load import *
+from systems.audio_manager import *
 
 if not installation.CheckForMissing():
     installation.PromptInstallation()
@@ -8,6 +9,9 @@ if not installation.CheckForMissing():
 
 
 import keyboard
+
+if not os.path.exists("./data"):
+    os.mkdir("./data")
 
 print("CONTROLS:")
 print("\nMenu")

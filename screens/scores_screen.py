@@ -18,7 +18,7 @@ class ScoresScreen:
         # Print the title
         print("SCORES")
 
-        data = LoadHighScores()
+        data = dict(reversed(list(LoadHighScores().items())))
         if len(data) >= 5:
             print("(Top 5)")
         elif len(data) == 0:

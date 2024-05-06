@@ -2,6 +2,7 @@ import os
 import csv
 from cryptography.fernet import Fernet
 from time import sleep
+import json
 
 
 # For checking if there is an existing save
@@ -32,7 +33,7 @@ def SaveData(info):
 
             encryptable = bytes(writable, 'utf-8')
 
-            # Encrypting the file contents
+            # Encrypting the file contents so that the user can't just save and win
             fernet = Fernet(key)
             encrypted = fernet.encrypt(encryptable)
             # Write the encrypted version to the file
@@ -80,43 +81,38 @@ def DeleteSaveData():
 def SaveHighScore(name, score):
     # Try Except so we don't stop if saving doesn't work, since it's not as important as everything else
     # Unfortunately does make it harder to debug, but oh well.
-    try:
+    #try:
         # Loading current data so we can keep it
         data = LoadHighScores()
-        with open("data/highscores.csv", 'w') as f:
+        with open("data/highscores.json", 'w') as f:
             # If it's already in there, check if they've just gotten a higher score
             if name in data:
                 if int(data[name]) < int(score):
                     data[name] = score
             else:
                 data[name] = score
-            # Create the writer
-            w = csv.DictWriter(f, ['name', 'score'])
 
-            # Sorted so that we can display the correct placements
-            sortedData = sorted(data)
-            for i in sortedData:
-                w.writerow({'name': i, 'score': data[i]})
+            sorted_data = json.dumps({k: v for k, v in sorted(data.items(), key=lambda item: int(item[1]))})
+
+            json.dump(data, f, sort_keys=True)
         return True
-    except:
-        return False
+    #except:
+        #return False
 
 
 def LoadHighScores():
     data = {}
-    if not os.path.exists("data/highscores.csv"):
+    if not os.path.exists("data/highscores.json") or os.stat("data/highscores.json").st_size == 0:
         return data
-    with open("data/highscores.csv", newline='') as f:
-        w = csv.DictReader(f, fieldnames=['name', 'score'])
-        # Go through each row and add it to the data
-        for row in w:
-            data[row['name']] = int(row['score'])
-    return data
+    with open("data/highscores.json", 'r') as f:
+        data = json.load(f)
+    sorted_data = json.dumps({k: v for k, v in sorted(data.items(), key=lambda item: int(item[1]))})
+    return json.loads(sorted_data)
 
 
 def ClearAllData():
-    if os.path.exists("data/highscores.csv"):
-        os.remove("data/highscores.csv")
+    if os.path.exists("data/highscores.json"):
+        os.remove("data/highscores.json")
     if os.path.exists("data/save.dat"):
         os.remove("data/save.dat")
     if os.path.exists("data/filekey.key"):

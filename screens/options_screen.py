@@ -1,10 +1,10 @@
 from systems.screen_manager import OpenMenu
 from systems.audio_manager import *
+from systems.settings import *
 
 import os
 
 buttons = [
-    "Music",
     "Sounds"
 ]
 
@@ -26,10 +26,13 @@ class OptionsScreen:
 
         # Go through the button options, and if we've reached the selected, add arrows
         for i in range(len(buttons)):
+            addition = ""
+            if i == 0:
+                addition = " - " + str(get_sound_enabled())
             if i == self.selection:
-                print(buttons[i] + " <<")
+                print(buttons[i] + addition + " <<")
             else:
-                print(buttons[i])
+                print(buttons[i] + addition)
 
         print('\n'*5)
         if self.selection == len(buttons):
@@ -56,20 +59,18 @@ class OptionsScreen:
         self.display()
 
     def select(self):
-        playSound("blipSelect")
         os.system('cls')
 
         # Check what the current button selection is
         match self.selection:
             case 0:
-                # Toggle music
-                pass
+                # Toggle
+                set_sound_enabled(not get_sound_enabled())
+                self.display()
             case 1:
-                # Toggle sounds
-                pass
-            case 2:
                 # Open main menu
                 OpenMenu("main_menu")
+        playSound("blipSelect")
 
     # So that backspace is uesable
     def back(self):
