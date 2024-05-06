@@ -3,7 +3,6 @@ from screens.game_screen import GameScreen
 from systems.save_load import *
 from systems.audio_manager import *
 
-from time import sleep
 import os
 
 buttons = [
@@ -17,6 +16,7 @@ buttons = [
 
 class DifficultiesScreen:
     def __init__(self):
+        # Initialize default variables
         self.selection = 0
         self.open = False
 

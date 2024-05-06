@@ -1,4 +1,3 @@
-import os
 import playsound
 import asyncio
 from systems.settings import *

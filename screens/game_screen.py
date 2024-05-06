@@ -9,10 +9,11 @@ import os
 
 class GameScreen:
     def __init__(self, difficulty, saveData=None):
+        # Initialize default variable
         self.open = False
 
         if saveData is not None:
-            #print(saveData)
+            # Initialize game with existing save data
             self.chances = saveData["chances"]
             self.word = saveData["word"]
             self.mistakes = saveData["mistakes"]
@@ -20,6 +21,7 @@ class GameScreen:
 
             self.blanks = self.blanks.strip()
         else:
+            # Set all the default values since there's no save data given
             self.chances = 10
 
             match difficulty:
@@ -45,39 +47,51 @@ class GameScreen:
 
         print(f"Chances: {self.chances}")
 
+        # Win screen
         if checkWin(self.blanks, self.word):
+            # Print out all the final info
             print("   " + getState(-1))
             print('\n' * 2)
             print("You saved him!")
             print(f"Your final score: {self.chances}")
+            # Delete the players save file since they've now beaten it
             DeleteSaveData()
             save = input("Save score? (y/n) ")
+            # While True loop to make sure we get an answer
             while True:
                 if save.lower() == 'y':
+                    # Get their name and make sure it's not empty
                     name = input("What's your name? ")
                     if name.strip() == '':
                         print("That is not a valid name!")
                         continue
+                    # SaveHighScore returns a boolean based on whether it was successful
+                    # So check if it was successful and inform the player accordingly
                     if SaveHighScore(name, str(self.chances)):
                         print("Successfully saved score!")
                     else:
                         print("Oops! An error occurred while saving your score :(")
                     input("Press enter to continue")
 
+                    # Move back to the main menu
                     self.close()
                     OpenMenu("main_menu")
                     break
                 elif save.lower() == 'n':
+                    # Just move back to the main menu
                     self.close()
                     OpenMenu("main_menu")
                     break
                 else:
+                    # Grr...
                     print("That's not an option!")
                     save = input("Save data? (y/n) ")
             return
 
+        # Print the hangman himself based on the number of chances
         print("   " + getState(self.chances))
 
+        # If chances is 0, game is lost
         if self.chances == 0:
             print("You killed him. He's dead now. Are you happy with yourself?\n")
             print(f"The word was: {self.word}\n")
@@ -85,12 +99,14 @@ class GameScreen:
             self.close()
             OpenMenu("main_menu")
         else:
+            # Print out the letters
             print(self.blanks)
             print('\n' * 2)
             print("Used Letters:", ' '.join(self.mistakes))
 
             guess = input("Guess >> ")
 
+            # If they type exit, use the back function
             if guess.strip().lower() == 'exit':
                 self.back()
                 return

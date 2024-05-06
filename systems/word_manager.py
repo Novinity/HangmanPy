@@ -128,9 +128,14 @@ def getNewWordMatch(letter, word, blanks):
     return final.strip()
 
 
-
+# For generating the blanks shown on screen for letters you have correct
+# E.g TREE = _R__
 def getBlanksFromFoundLetters(word, found_letters):
+    # Initialize blanks variable
     blanks = ""
+    # For every letter in the word, check if the current letter from found_letters is in the word
+    # If it is, add it to the blanks
+    # If not, just add an underscore
     for i in range(len(word)):
         if word[i] in found_letters:
             blanks += word[i] + " "
@@ -139,10 +144,15 @@ def getBlanksFromFoundLetters(word, found_letters):
     return blanks
 
 
+# For getting a list of the found letters based on the blanks we have
 def getFoundLettersFromBlanks(blanks):
+    # Split the blanks by space
     split = blanks.split(' ')
+    # Initialize finalFound variable
     finalFound = []
 
+    # For every character in the split list
+    # If current is not an underscore then add it to the finalFound list
     for i in split:
         if i != '_':
             finalFound.append(i)

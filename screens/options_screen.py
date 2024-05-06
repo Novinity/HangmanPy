@@ -11,6 +11,7 @@ buttons = [
 
 class OptionsScreen:
     def __init__(self):
+        # Initialize default variables
         self.selection = 0
         self.open = False
 
@@ -28,6 +29,7 @@ class OptionsScreen:
         for i in range(len(buttons)):
             addition = ""
             if i == 0:
+                # Show the current value of the Sound Enabled setting
                 addition = " - " + str(get_sound_enabled())
             if i == self.selection:
                 print(buttons[i] + addition + " <<")
@@ -72,7 +74,7 @@ class OptionsScreen:
                 OpenMenu("main_menu")
         playSound("blipSelect")
 
-    # So that backspace is uesable
+    # So that backspace is usable
     def back(self):
         playSound("blipSelect")
         self.close()

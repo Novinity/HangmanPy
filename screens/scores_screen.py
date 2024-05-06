@@ -1,12 +1,12 @@
 from systems.screen_manager import OpenMenu
 from systems.audio_manager import *
 
-import os
 from systems.save_load import *
 
 
 class ScoresScreen:
     def __init__(self):
+        # Initialize default variable
         self.open = False
 
     def display(self):
@@ -18,7 +18,9 @@ class ScoresScreen:
         # Print the title
         print("SCORES")
 
-        data = dict(reversed(list(LoadHighScores().items())))
+        # Load the high scores
+        data = LoadHighScores()
+        # Print title accordingly based on the amount of high scores
         if len(data) >= 5:
             print("(Top 5)")
         elif len(data) == 0:
@@ -38,7 +40,7 @@ class ScoresScreen:
     def change_selection(self, dir):
         pass
 
-    # Back si the only selectable
+    # Back is the only selectable
     def select(self):
         playSound("blipSelect")
         os.system('cls')

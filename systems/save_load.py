@@ -1,5 +1,4 @@
 import os
-import csv
 from cryptography.fernet import Fernet
 from time import sleep
 import json
@@ -14,6 +13,7 @@ def SaveExists():
 
 def SaveData(info):
     try:
+        # Remove all the existing files
         if os.path.exists("data/filekey.key"):
             os.remove("data/filekey.key")
         if os.path.exists("data/save.dat"):
@@ -45,17 +45,25 @@ def SaveData(info):
 
 
 def LoadData():
+    # Initialize data variable
     data = {}
+    # If the save file or decryption key don't exist, return the empty data variable
+    # since we can't do anything without both.
     if not os.path.exists("data/save.dat") or not os.path.exists("data/filekey.key"):
         return data
 
+    # Initialize key variable
     key = ""
+    # Read the key
     with open('data/filekey.key', 'rb') as filekey:
         key = filekey.read()
+    # Initialize fernet with the key as input
     fernet = Fernet(key)
 
     with open("data/save.dat", 'rb') as f:
+        # Decrypt the file using the fernet and key
         decrypted = fernet.decrypt(f.read()).decode('utf-8')
+        # Go through and add to the data based on the index we're at
         index = 0
         for line in decrypted.split('\n'):
             if line.strip() == '':
@@ -72,6 +80,7 @@ def LoadData():
     return data
 
 
+# Delete existing save if it exists
 def DeleteSaveData():
     if not os.path.exists("data/save.dat"):
         return
@@ -81,7 +90,7 @@ def DeleteSaveData():
 def SaveHighScore(name, score):
     # Try Except so we don't stop if saving doesn't work, since it's not as important as everything else
     # Unfortunately does make it harder to debug, but oh well.
-    #try:
+    try:
         # Loading current data so we can keep it
         data = LoadHighScores()
         with open("data/highscores.json", 'w') as f:
@@ -92,25 +101,30 @@ def SaveHighScore(name, score):
             else:
                 data[name] = score
 
-            sorted_data = json.dumps({k: v for k, v in sorted(data.items(), key=lambda item: int(item[1]))})
-
+            # Write json to file
             json.dump(data, f, sort_keys=True)
         return True
-    #except:
-        #return False
+    except:
+        return False
 
 
 def LoadHighScores():
+    # Initialize data variable
     data = {}
+    # If we don't have a highscores file or the file is empty, return the empty data variable
     if not os.path.exists("data/highscores.json") or os.stat("data/highscores.json").st_size == 0:
         return data
+    # Load the json from the file into the data variable
     with open("data/highscores.json", 'r') as f:
         data = json.load(f)
+    # Sort the data into ascending order
     sorted_data = json.dumps({k: v for k, v in sorted(data.items(), key=lambda item: int(item[1]))})
-    return json.loads(sorted_data)
+    # Return the data as a reversed dictionary so that it can be used in descending order
+    return dict(reversed(list(json.loads(sorted_data).items())))
 
 
 def ClearAllData():
+    # Delete all files
     if os.path.exists("data/highscores.json"):
         os.remove("data/highscores.json")
     if os.path.exists("data/save.dat"):

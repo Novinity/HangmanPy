@@ -13,6 +13,7 @@ buttons = [
 
 class MainMenuScreen:
     def __init__(self):
+        # Initialize default variables
         self.selection = 0
         self.open = False
 
