@@ -114,7 +114,7 @@ def getState(chances):
             """
         case -1:
             return """
-   \o/
+   \\o/
     |
    / \\
             """
