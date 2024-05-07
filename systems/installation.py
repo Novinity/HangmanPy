@@ -47,7 +47,7 @@ def CheckForMissing():
         if package in sys.modules:
             continue
         # Previous check is not 100% reliable, so check if the module can be imported
-        elif (spec := importlib.util.find_spec(package)) is not None:
+        elif importlib.util.find_spec(package) is not None:
             continue
         # A package was not installed.
         else:
