@@ -67,7 +67,7 @@ class GameScreen:
                         continue
                     # SaveHighScore returns a boolean based on whether it was successful
                     # So check if it was successful and inform the player accordingly
-                    if SaveHighScore(name, str(self.chances)):
+                    if SaveHighScore(name, str(self.chances), self.difficulty):
                         print("Successfully saved score!")
                     else:
                         print("Oops! An error occurred while saving your score :(")

@@ -87,7 +87,7 @@ def DeleteSaveData():
     os.remove("data/save.dat")
 
 
-def SaveHighScore(name, score):
+def SaveHighScore(name, score, difficulty):
     # Try Except so we don't stop if saving doesn't work, since it's not as important as everything else
     # Unfortunately does make it harder to debug, but oh well.
     try:
@@ -95,11 +95,13 @@ def SaveHighScore(name, score):
         data = LoadHighScores()
         with open("data/highscores.json", 'w') as f:
             # If it's already in there, check if they've just gotten a higher score
-            if name in data:
-                if int(data[name]) < int(score):
-                    data[name] = score
+            if not difficulty in data:
+                data[difficulty] = {}
+            if name in data[difficulty]:
+                if int(data[difficulty][name]) < int(score):
+                    data[difficulty][name] = score
             else:
-                data[name] = score
+                data[difficulty][name] = score
 
             # Write json to file
             json.dump(data, f, sort_keys=True)
@@ -117,10 +119,8 @@ def LoadHighScores():
     # Load the json from the file into the data variable
     with open("data/highscores.json", 'r') as f:
         data = json.load(f)
-    # Sort the data into ascending order
-    sorted_data = json.dumps({k: v for k, v in sorted(data.items(), key=lambda item: int(item[1]))})
     # Return the data as a reversed dictionary so that it can be used in descending order
-    return dict(reversed(list(json.loads(sorted_data).items())))
+    return data
 
 
 def ClearAllData():

@@ -20,19 +20,26 @@ class ScoresScreen:
 
         # Load the high scores
         data = LoadHighScores()
-        # Print title accordingly based on the amount of high scores
-        if len(data) >= 5:
-            print("(Top 5)")
-        elif len(data) == 0:
-            print("No high scores yet! Why don't you be the first?")
-        print("\n")
-        index = 1
-        # Go through the top 5 placeholders and add them to the screen
-        for i in data:
-            if index == 6:
-                break
-            print(f"> {str(index)}. {i}: {str(data[i])}")
-            index += 1
+        for difficulty in data:
+            print(difficulty.upper())
+            # Print title accordingly based on the amount of high scores
+            if len(data[difficulty]) >= 5:
+                print("(Top 5)")
+            elif len(data[difficulty]) == 0:
+                print("No high scores yet! Why don't you be the first?")
+                continue
+            # Sort the data
+            sorted_data = dict(reversed(list(json.loads(
+                json.dumps({k: v for k, v in sorted(data[difficulty].items(), key=lambda item: int(item[1]))})).items())))
+
+            index = 1
+            # Go through the top 5 placeholders and add them to the screen
+            for i in sorted_data:
+                if index == 6:
+                    break
+                print(f"> {str(index)}. {i}: {str(sorted_data[i])}")
+                index += 1
+            print('\n')
 
         print("\n"*5)
         print("Back <<")
