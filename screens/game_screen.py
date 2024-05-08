@@ -14,10 +14,12 @@ class GameScreen:
 
         if saveData is not None:
             # Initialize game with existing save data
+            print(saveData)
             self.chances = saveData["chances"]
             self.word = saveData["word"]
             self.mistakes = saveData["mistakes"]
             self.blanks = getBlanksFromFoundLetters(self.word, saveData["found"])
+            self.difficulty = saveData["difficulty"]
 
             self.blanks = self.blanks.strip()
         else:
@@ -163,7 +165,8 @@ class GameScreen:
                             "word": self.word,
                             "chances": self.chances,
                             "mistakes": self.mistakes,
-                            "found": getFoundLettersFromBlanks(self.blanks)
+                            "found": getFoundLettersFromBlanks(self.blanks),
+                            "difficulty": self.difficulty
                         }
                         # Save info
                         SaveData(info)

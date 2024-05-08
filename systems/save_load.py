@@ -29,7 +29,7 @@ def SaveData(info):
         with open("data/save.dat", 'wb') as f:
             # Creating the string for writing
             writable = info['word'] + '\n' + str(info['chances']) + '\n' + ','.join(info["mistakes"]) + '\n' + ','.join(
-                info["found"])
+                info["found"]) + '\n' + info['difficulty']
 
             encryptable = bytes(writable, 'utf-8')
 
@@ -76,6 +76,8 @@ def LoadData():
                 data["mistakes"] = line.strip().split(',')
             elif index == 3:
                 data["found"] = line.strip().split(',')
+            elif index == 4:
+                data["difficulty"] = line.strip()
             index += 1
     return data
 

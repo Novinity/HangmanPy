@@ -1,12 +1,12 @@
-from systems.screen_manager import OpenMenu
 import systems.installation as installation
-from systems.save_load import *
-from systems.audio_manager import *
 
 if not installation.CheckForMissing():
     installation.PromptInstallation()
     exit()
 
+from systems.save_load import *
+from systems.screen_manager import OpenMenu
+import os
 
 import keyboard
 
