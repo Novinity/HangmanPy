@@ -63,6 +63,7 @@ def LoadData():
     with open("data/save.dat", 'rb') as f:
         # Decrypt the file using the fernet and key
         decrypted = fernet.decrypt(f.read()).decode('utf-8')
+        print(decrypted)
         # Go through and add to the data based on the index we're at
         index = 0
         for line in decrypted.split('\n'):
@@ -74,9 +75,9 @@ def LoadData():
                 data["chances"] = int(line.strip())
             elif index == 2:
                 data["mistakes"] = line.strip().split(',')
-            elif index == 3:
+            elif index == 3 and not line.strip().islower():
                 data["found"] = line.strip().split(',')
-            elif index == 4:
+            else:
                 data["difficulty"] = line.strip()
             index += 1
     return data

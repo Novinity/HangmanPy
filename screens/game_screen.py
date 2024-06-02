@@ -18,7 +18,10 @@ class GameScreen:
             self.chances = saveData["chances"]
             self.word = saveData["word"]
             self.mistakes = saveData["mistakes"]
-            self.blanks = getBlanksFromFoundLetters(self.word, saveData["found"])
+            if "found" in saveData:
+                self.blanks = getBlanksFromFoundLetters(self.word, saveData["found"])
+            else:
+                self.blanks = ("_ " * len(self.word)).strip()
             self.difficulty = saveData["difficulty"]
 
             self.blanks = self.blanks.strip()
