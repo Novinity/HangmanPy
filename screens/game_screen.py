@@ -17,7 +17,10 @@ class GameScreen:
             print(saveData)
             self.chances = saveData["chances"]
             self.word = saveData["word"]
-            self.mistakes = saveData["mistakes"]
+            if "mistakes" in saveData:
+                self.mistakes = saveData["mistakes"]
+            else:
+                self.mistakes = []
             if "found" in saveData:
                 self.blanks = getBlanksFromFoundLetters(self.word, saveData["found"])
             else:

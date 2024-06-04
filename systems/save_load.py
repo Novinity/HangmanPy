@@ -28,8 +28,7 @@ def SaveData(info):
         # Info should contain the word, current amount of chances, mistakes, and found letters
         with open("data/save.dat", 'wb') as f:
             # Creating the string for writing
-            writable = info['word'] + '\n' + str(info['chances']) + '\n' + ','.join(info["mistakes"]) + '\n' + ','.join(
-                info["found"]) + '\n' + info['difficulty']
+            writable = json.dumps(info)
 
             encryptable = bytes(writable, 'utf-8')
 
@@ -64,22 +63,7 @@ def LoadData():
         # Decrypt the file using the fernet and key
         decrypted = fernet.decrypt(f.read()).decode('utf-8')
         print(decrypted)
-        # Go through and add to the data based on the index we're at
-        index = 0
-        for line in decrypted.split('\n'):
-            if line.strip() == '':
-                continue
-            if index == 0:
-                data["word"] = line.strip()
-            elif index == 1:
-                data["chances"] = int(line.strip())
-            elif index == 2:
-                data["mistakes"] = line.strip().split(',')
-            elif index == 3 and not line.strip().islower():
-                data["found"] = line.strip().split(',')
-            else:
-                data["difficulty"] = line.strip()
-            index += 1
+        data = json.loads(decrypted)
     return data
 
 
